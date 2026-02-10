@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ContatoService {
+public class ContatoService { // RESTful
 
     private final ContatosRepository repository;
 

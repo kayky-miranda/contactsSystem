@@ -19,13 +19,15 @@ public class ContactsController {
         return service.listar();
     }
 
+
+
     @GetMapping("/{id}")
     public Contato buscar(@PathVariable Long id){
         return service.buscarPorId(id);
     }
 
     @PostMapping
-    public Contato cria(@RequestBody Contato contato){
+    public Contato criar(@RequestBody Contato contato){
         return service.salvar(contato);
     }
 
