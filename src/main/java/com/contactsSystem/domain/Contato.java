@@ -30,4 +30,7 @@ public class Contato {
 
     private LocalDate dataNascimento;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Endereco>enderecos;
+
 }
