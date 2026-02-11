@@ -3,6 +3,7 @@ package com.contactsSystem.controller;
 import com.contactsSystem.domain.Contato;
 import com.contactsSystem.service.ContatoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,30 +16,35 @@ public class ContactsController {
     private ContatoService service;
 
     @GetMapping
-    public List<Contato> listar(){
-        return service.listar();
-    }
-
-
-
-    @GetMapping("/{id}")
-    public Contato buscar(@PathVariable Long id){
-        return service.buscarPorId(id);
+    public ResponseEntity<Contato> buscar(@RequestParam Long id){
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @PostMapping
-    public Contato criar(@RequestBody Contato contato){
-        return service.salvar(contato);
+    public ResponseEntity<Void> criar(@RequestBody Contato contato){
+        service.salvar(contato);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
-    public Contato atualizar(@PathVariable Long id, @RequestBody Contato contato){
-        return service.atualizar(id, contato);
+    @PatchMapping
+    public ResponseEntity<Void> atualizar(@RequestParam Long id, @RequestBody Contato contato){
+        service.atualizar(id, contato);
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id){
+    @PutMapping
+    public ResponseEntity<Void> atualizarPut(@RequestParam Long id, @RequestBody Contato contato){
+        service.atualizarPut(id, contato);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+    @DeleteMapping
+    public ResponseEntity<Void> deletar(@RequestParam Long id){
+
         service.deletar(id);
+        return ResponseEntity.ok().build();
     }
 
 }
