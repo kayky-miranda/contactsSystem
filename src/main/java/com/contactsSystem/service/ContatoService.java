@@ -1,14 +1,17 @@
 package com.contactsSystem.service;
 
 import com.contactsSystem.domain.Contato;
+import com.contactsSystem.domain.Endereco;
 import com.contactsSystem.repository.ContatosRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ContatoService { // RESTful
+
 
     private final ContatosRepository repository;
 
@@ -28,7 +31,7 @@ public class ContatoService { // RESTful
     }
 
     @Transactional
-    public void salvar(Contato contato){ // realiza o salvamento do contato
+    public void salvar(Contato contato){
         repository.saveAndFlush(contato);
     }
 

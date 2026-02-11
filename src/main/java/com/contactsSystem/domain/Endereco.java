@@ -1,11 +1,12 @@
 package com.contactsSystem.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Endereco {
 
     @Id
@@ -16,9 +17,8 @@ public class Endereco {
     private String numero;
     private String cep;
 
-    private String bairro;
-    private String cidade;
-    private String estado;
 
-
+    @ManyToOne
+    @JoinColumn(name = "contato_id")
+    private Contato contato;
 }
