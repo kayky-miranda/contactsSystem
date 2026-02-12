@@ -32,4 +32,5 @@ public class Contato {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Endereco>enderecos;
 
+
 }

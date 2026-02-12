@@ -12,11 +12,12 @@ import java.util.List;
 @Service
 public class ContatoService { // RESTful
 
-
     private final ContatosRepository repository;
+    private final ViaCepService viaCepService; // injeção do viaCep em contatos
 
-    public ContatoService(ContatosRepository repository) {
+    public ContatoService(ContatosRepository repository, ViaCepService viaCepService) {
         this.repository = repository;
+        this.viaCepService = viaCepService;
     }
 
     public List<Contato> listar(){ // metodo listar contatos salvos
@@ -31,7 +32,26 @@ public class ContatoService { // RESTful
     }
 
     @Transactional
-    public void salvar(Contato contato){
+    public void salvar(Contato contato) {
+
+        if (contato.getEnderecos() != null) {
+
+            contato.getEnderecos().forEach(endereco -> {
+
+                if (endereco.getCep() != null) {
+
+                    var viaCep = viaCepService.buscarPorCep(endereco.getCep());
+
+                    endereco.setRua(viaCep.logradouro());
+                    endereco.setBairro(viaCep.bairro());
+                    endereco.setCidade(viaCep.localidade());
+                    endereco.setUf(viaCep.uf());
+
+                    endereco.setContato(contato);
+                }
+            });
+        }
+
         repository.saveAndFlush(contato);
     }
 
@@ -49,23 +69,46 @@ public class ContatoService { // RESTful
     }
 
     @Transactional
-    public void atualizar(Long id, Contato contato) { // utiliza o id como referencia para buscar e atualiza os dados
-        Contato real = repository.findById(id).orElseThrow(() -> new RuntimeException("Contato não encontrado"));
-        Contato contatoAtualizado = Contato.builder()
-                .nome(contato.getNome() != null ? contato.getNome() :
-                        real.getNome())
-                .email(contato.getEmail() != null ? contato.getEmail() :
-                        real.getEmail())
-                .telefone(contato.getTelefone() != null ? contato.getTelefone() :
-                        real.getTelefone())
-                .dataNascimento(contato.getDataNascimento() != null ? contato.getDataNascimento() :
-                        real.getDataNascimento())
-                .enderecos(contato.getEnderecos() != null ? contato.getEnderecos() :
-                        real.getEnderecos())
-                .id(real.getId())
-                .build();
+    public void atualizar(Long id, Contato contato) {
 
-        repository.saveAndFlush(contatoAtualizado);
+        Contato real = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Contato não encontrado"));
+
+        if (contato.getNome() != null)
+            real.setNome(contato.getNome());
+
+        if (contato.getEmail() != null)
+            real.setEmail(contato.getEmail());
+
+        if (contato.getTelefone() != null)
+            real.setTelefone(contato.getTelefone());
+
+        if (contato.getDataNascimento() != null)
+            real.setDataNascimento(contato.getDataNascimento());
+
+        if (contato.getEnderecos() != null) {
+
+            for (Endereco novo : contato.getEnderecos()) {
+
+                Endereco existente = real.getEnderecos().stream()
+                        .filter(e -> e.getId().equals(novo.getId()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+
+                if (novo.getCep() != null) {
+                    var viaCep = viaCepService.buscarPorCep(novo.getCep());
+
+                    existente.setCep(novo.getCep());
+                    existente.setRua(viaCep.logradouro());
+                    existente.setBairro(viaCep.bairro());
+                    existente.setCidade(viaCep.localidade());
+                    existente.setUf(viaCep.uf());
+                }
+
+                if (novo.getNumero() != null)
+                    existente.setNumero(novo.getNumero());
+            }
+        }
     }
 
 

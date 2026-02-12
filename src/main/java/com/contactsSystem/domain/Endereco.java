@@ -13,12 +13,16 @@ public class Endereco {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String rua;
-    private String numero;
     private String cep;
+    private String rua;
+    private String bairro;
+    private String cidade;
+    private String uf;
+    private String numero;
 
 
     @ManyToOne
     @JoinColumn(name = "contato_id")
     private Contato contato;
+
 }
