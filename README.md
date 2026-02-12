@@ -1,7 +1,8 @@
 # Contacts System
 
 API RESTful desenvolvida com Java + Spring Boot para gerenciamento de contatos e endereços.
-Projeto criado como parte de um teste técnico para vaga de desenvolvedor.
+
+Projeto criado como parte de um teste técnico para vaga de desenvolvedor e aplicação de conceitos aprendidos.
 
 # Objetivo do projeto
 
@@ -87,6 +88,32 @@ http://localhost:8080/swagger-ui/index.html
 No ambiente em nuvem:
 https://contactssystem.onrender.com/swagger-ui/index.html#/
 
+# Como executar o projeto localmente
+Pré-requisitos
+
+- Java 17 ou superior
+- Maven instalado
+
+### Passo a passo
+
+- Clonar o repositório:
+```git clone https://github.com/kayky-miranda/contactsSystem```
+
+- Entrar na pasta do projeto:
+```cd contactsSystem```
+
+- Executar a aplicação:
+```mvn spring-boot:run```
+
+- Aplicação disponível em:
+```http://localhost:8080```
+
+- Ambiente na núvem: ```https://contactssystem.onrender.com/swagger-ui/index.html#/```
+
+- Banco de dados H2
+Console do banco:
+```http://localhost:8080/h2-console```
+
 ### Criar contato — POST /contatos
 
 ````
@@ -113,42 +140,19 @@ https://contactssystem.onrender.com/swagger-ui/index.html#/
   "dataNascimento": "0000-00-10",
   "enderecos": [
     {
-      "id: "",
+      "id": ,
       "cep": "",
       "numero": ""
     }
   ]
 }
 ````
-# Como executar o projeto localmente
-Pré-requisitos
-
-- Java 17 ou superior
-- Maven instalado
-
-### Passo a passo
-
-- Clonar o repositório
-git clone https://github.com/kayky-miranda/contactsSystem
-
-- Entrar na pasta do projeto
-cd contactsSystem
-
-- Executar a aplicação
-mvn spring-boot:run
-
-- Aplicação disponível em:
-http://localhost:8080
-
-- Banco de dados H2
-Console do banco:
-http://localhost:8080/h2-console
 
 ### Configuração:
 
-- JDBC URL: jdbc:h2:mem:testdb  
-- User: sa  
-- Password: (vazio)
+- JDBC URL: ```jdbc:h2:mem:testdb```
+- User: ```sa```
+- Password: ```(vazio)```
 
 # Boas práticas aplicadas
 
