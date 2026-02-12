@@ -2,16 +2,22 @@ package com.contactsSystem.service;
 
 import com.contactsSystem.domain.Contato;
 import com.contactsSystem.domain.Endereco;
+import com.contactsSystem.exception.CepInvalidoException;
+import com.contactsSystem.exception.DataInvalidaException;
+import com.contactsSystem.exception.InfosJaExistenteException;
 import com.contactsSystem.repository.ContatosRepository;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class ContatoService { // RESTful
+
+
 
     private final ContatosRepository repository;
     private final ViaCepService viaCepService; // injeção do viaCep em contatos
@@ -40,7 +46,7 @@ public class ContatoService { // RESTful
             contato.getEnderecos().forEach(endereco -> {
 
                 if (endereco.getCep() != null) {
-
+                    validarCep(endereco.getCep()); //valida o cep
                     var viaCep = viaCepService.buscarPorCep(endereco.getCep());
 
                     endereco.setRua(viaCep.logradouro());
@@ -48,11 +54,19 @@ public class ContatoService { // RESTful
                     endereco.setCidade(viaCep.localidade());
                     endereco.setUf(viaCep.uf());
 
+
                     endereco.setContato(contato);
                 }
             });
         }
 
+        if (repository.existsByEmail(contato.getEmail())) {
+            throw new InfosJaExistenteException("E-mail já cadastrado");
+        }
+        if (repository.existsByTelefone(contato.getTelefone())) {
+            throw new InfosJaExistenteException("Telefone já cadastrado");
+        }
+        validarData(contato.getDataNascimento());
         repository.saveAndFlush(contato);
     }
 
@@ -76,7 +90,9 @@ public class ContatoService { // RESTful
                         .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
                 if (novo.getCep() != null) {
+                    validarCep(novo.getCep()); //valida o cep
                     var viaCep = viaCepService.buscarPorCep(novo.getCep());
+
 
                     existente.setCep(novo.getCep());
                     existente.setRua(viaCep.logradouro());
@@ -87,8 +103,18 @@ public class ContatoService { // RESTful
 
                 if (novo.getNumero() != null)
                     existente.setNumero(novo.getNumero());
+
             }
         }
+
+        if (repository.existsByEmail(contato.getEmail())) {
+            throw new InfosJaExistenteException("E-mail já cadastrado");
+        }
+        if (repository.existsByTelefone(contato.getTelefone())) {
+            throw new InfosJaExistenteException("Telefone já cadastrado");
+        }
+        validarData(contato.getDataNascimento());
+
 
         repository.save(real);
     }
@@ -121,7 +147,9 @@ public class ContatoService { // RESTful
                         .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
                 if (novo.getCep() != null) {
+                    validarCep(novo.getCep()); //valida o cep
                     var viaCep = viaCepService.buscarPorCep(novo.getCep());
+
 
                     existente.setCep(novo.getCep());
                     existente.setRua(viaCep.logradouro());
@@ -132,14 +160,51 @@ public class ContatoService { // RESTful
 
                 if (novo.getNumero() != null)
                     existente.setNumero(novo.getNumero());
+
+                if (repository.existsByEmail(contato.getEmail())) {
+                    throw new InfosJaExistenteException("E-mail já cadastrado");
+                }
+                if (repository.existsByTelefone(contato.getTelefone())) {
+                    throw new InfosJaExistenteException("Telefone já cadastrado");
+                }
+                validarData(contato.getDataNascimento());
+
             }
         }
     }
 
-
     @Transactional
     public void deletar(Long id) { // deleta o id mencionado
         repository.deleteById(id);
+    }
+
+    private void validarCep(String cep) {
+
+        if (cep == null || cep.isBlank()) {
+            throw new CepInvalidoException("O CEP é obrigatório");
+        }
+        //replace ajuda a retirar os "-" e dar um replacement ""
+        String cepNumerico = cep.replace("-", "");
+
+        //matches serve para identificar se a variavel passada tem um determinado numero de caracteres
+        if (!cepNumerico.matches("\\d{8}")) {
+            throw new CepInvalidoException("CEP invalido, o mesmo precisa conter 8 digitos.");
+        }
+    }
+
+    private void validarData(LocalDate dataNascimento) {
+
+        if (dataNascimento == null) {
+            throw new DataInvalidaException("Data de nascimento é obrigatoria");
+        }
+
+        if (dataNascimento.isAfter(LocalDate.now())) {
+            throw new DataInvalidaException("Data de nascimento não pode ser maior que o dia de hoje");
+        }
+
+        if (dataNascimento.isBefore(LocalDate.of(1900, 1, 1))) {
+            throw new DataInvalidaException("Data de nascimento inválida");
+        }
     }
 
 }
