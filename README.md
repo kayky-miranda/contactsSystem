@@ -87,13 +87,46 @@ http://localhost:8080/swagger-ui/index.html
 No ambiente em nuvem:
 https://contactssystem.onrender.com/swagger-ui/index.html#/
 
+### Criar contato — POST /contatos
+
+````
+{
+  "nome": "",
+  "email": "",
+  "telefone": "",
+  "dataNascimento": "0000-00-10",
+  "enderecos": [
+    {
+      "cep": "",
+      "numero": ""
+    }
+  ]
+}
+````
+### Editar contato — PUT, PATCH /contatos
+
+````
+{
+  "nome": "",
+  "email": "",
+  "telefone": "",
+  "dataNascimento": "0000-00-10",
+  "enderecos": [
+    {
+      "id: "",
+      "cep": "",
+      "numero": ""
+    }
+  ]
+}
+````
 # Como executar o projeto localmente
 Pré-requisitos
 
 - Java 17 ou superior
 - Maven instalado
 
-# Passo a passo
+### Passo a passo
 
 - Clonar o repositório
 git clone https://github.com/kayky-miranda/contactsSystem
@@ -111,11 +144,11 @@ http://localhost:8080
 Console do banco:
 http://localhost:8080/h2-console
 
-Configuração:
+### Configuração:
 
-JDBC URL: jdbc:h2:mem:testdb  
-User: sa  
-Password: (vazio)
+- JDBC URL: jdbc:h2:mem:testdb  
+- User: sa  
+- Password: (vazio)
 
 # Boas práticas aplicadas
 

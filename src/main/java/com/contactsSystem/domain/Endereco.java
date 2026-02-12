@@ -1,5 +1,6 @@
 package com.contactsSystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class Endereco {
 
     @ManyToOne
     @JoinColumn(name = "contato_id")
+    @JsonBackReference
     private Contato contato;
 
 }

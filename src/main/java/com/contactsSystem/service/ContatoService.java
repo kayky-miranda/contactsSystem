@@ -65,6 +65,30 @@ public class ContatoService { // RESTful
         real.setDataNascimento(contato.getDataNascimento());
         real.setEnderecos(contato.getEnderecos());
 
+        if (contato.getEnderecos() != null) {
+
+            for (Endereco novo : contato.getEnderecos()) {
+
+                Endereco existente = real.getEnderecos().stream()
+                        .filter(e -> e.getId().equals(novo.getId()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+
+                if (novo.getCep() != null) {
+                    var viaCep = viaCepService.buscarPorCep(novo.getCep());
+
+                    existente.setCep(novo.getCep());
+                    existente.setRua(viaCep.logradouro());
+                    existente.setBairro(viaCep.bairro());
+                    existente.setCidade(viaCep.localidade());
+                    existente.setUf(viaCep.uf());
+                }
+
+                if (novo.getNumero() != null)
+                    existente.setNumero(novo.getNumero());
+            }
+        }
+
         repository.save(real);
     }
 

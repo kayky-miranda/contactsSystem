@@ -1,6 +1,7 @@
 package com.contactsSystem.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,8 +30,9 @@ public class Contato {
 
     private LocalDate dataNascimento;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Endereco>enderecos;
+    @OneToMany(mappedBy = "contato", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Endereco> enderecos;
 
 
 }
