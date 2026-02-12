@@ -32,21 +32,23 @@ Disponibilizar uma API capaz de:
 
 O sistema segue o padrão de arquitetura em camadas:
 
-controller → recebe requisições HTTP
-service → regras de negócio e transações
-repository → acesso ao banco com JPA
-domain → entidades do sistema
-DTO → utilizado para transportar dados da API
+- controller → recebe requisições HTTP
+- service → regras de negócio e transações
+- repository → acesso ao banco com JPA
+- domain → entidades do sistema
+- DTO → utilizado para transportar dados da API
+
 
 # Estrutura de pastas
 
-src/main/java/com/contactsSystem
-├── controller
-├── service
-├── repository
-├── domain
-├── dto
-└── ContactsSystemApplication.java
+- src/main/java/com/contactsSystem
+
+- ├── controller
+- ├── service
+- ├── repository
+- ├── domain
+- ├── dto
+- └── ContactsSystemApplication.java
 
 # Modelo de dados
 
@@ -86,26 +88,26 @@ No ambiente em nuvem:
 https://contactssystem.onrender.com/swagger-ui/index.html#/
 
 # Como executar o projeto localmente
-# Pré-requisitos
+Pré-requisitos
 
-Java 17 ou superior
-Maven instalado
+- Java 17 ou superior
+- Maven instalado
 
 # Passo a passo
 
-# Clonar o repositório
+- Clonar o repositório
 git clone https://github.com/kayky-miranda/contactsSystem
 
-# Entrar na pasta do projeto
+- Entrar na pasta do projeto
 cd contactsSystem
 
-# Executar a aplicação
+- Executar a aplicação
 mvn spring-boot:run
 
-# Aplicação disponível em:
+- Aplicação disponível em:
 http://localhost:8080
 
-# Banco de dados H2
+- Banco de dados H2
 Console do banco:
 http://localhost:8080/h2-console
 
