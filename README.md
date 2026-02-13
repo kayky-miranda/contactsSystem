@@ -109,13 +109,14 @@ Pré-requisitos
 - Aplicação disponível em:
 ```http://localhost:8080```
 
-- Ambiente na núvem: ```https://contactssystem.onrender.com/swagger-ui/index.html#/```
+- Ambiente na núvem: ```https://contactssystem.onrender.com/contatos```
 
-- Banco de dados H2
-Console do banco:
+- Swagger: ```https://contactssystem.onrender.com/swagger-ui/index.html#/```
+
+- Console do banco de dados:
 ```http://localhost:8080/h2-console```
 
-### Configuração do banco de dados H2:
+### Acesso do banco de dados H2:
 
 - JDBC URL: ```jdbc:h2:mem:testdb```
 - User: ```sa```
