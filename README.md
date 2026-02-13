@@ -6,7 +6,7 @@ Projeto criado como parte de um teste técnico para vaga de desenvolvedor e apli
 
 # Objetivo do projeto
 
-Disponibilizar uma API capaz de:
+Desenvolver uma API capaz de:
 
 - Listar todos os contatos cadastrados
 - Buscar contato por ID
@@ -49,6 +49,7 @@ O sistema segue o padrão de arquitetura em camadas:
 - ├── repository
 - ├── domain
 - ├── dto
+- ├── exception
 - └── ContactsSystemApplication.java
 
 # Modelo de dados
@@ -114,6 +115,12 @@ Pré-requisitos
 Console do banco:
 ```http://localhost:8080/h2-console```
 
+### Configuração do banco de dados H2:
+
+- JDBC URL: ```jdbc:h2:mem:testdb```
+- User: ```sa```
+- Password: ```(vazio)```
+
 ### Criar contato — POST /contatos
 
 ````
@@ -121,7 +128,7 @@ Console do banco:
   "nome": "",
   "email": "",
   "telefone": "",
-  "dataNascimento": "0000-00-10",
+  "dataNascimento": "2000-01-10",
   "enderecos": [
     {
       "cep": "",
@@ -137,7 +144,7 @@ Console do banco:
   "nome": "",
   "email": "",
   "telefone": "",
-  "dataNascimento": "0000-00-10",
+  "dataNascimento": "2000-01-10",
   "enderecos": [
     {
       "id": ,
@@ -147,12 +154,6 @@ Console do banco:
   ]
 }
 ````
-
-### Configuração:
-
-- JDBC URL: ```jdbc:h2:mem:testdb```
-- User: ```sa```
-- Password: ```(vazio)```
 
 # Boas práticas aplicadas
 
@@ -165,7 +166,7 @@ Console do banco:
 - Versionamento com Git e histórico de commits organizado
 - Deploy funcional em nuvem gratuita
 
-Desenvolvido por
+Desenvolvido por\
 Kayky Miranda
 
 GitHub:

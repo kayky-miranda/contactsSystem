@@ -176,6 +176,7 @@ public class ContatoService { // RESTful
     @Transactional
     public void deletar(Long id) { // deleta o id mencionado
         repository.deleteById(id);
+
     }
 
     private void validarCep(String cep) {
@@ -190,6 +191,7 @@ public class ContatoService { // RESTful
         if (!cepNumerico.matches("\\d{8}")) {
             throw new CepInvalidoException("CEP invalido, o mesmo precisa conter 8 digitos.");
         }
+
     }
 
     private void validarData(LocalDate dataNascimento) {
