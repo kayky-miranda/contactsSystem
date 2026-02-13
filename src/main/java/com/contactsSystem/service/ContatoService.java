@@ -60,6 +60,13 @@ public class ContatoService { // RESTful
             });
         }
 
+        if (contato.getEnderecos() != null) {
+            contato.getEnderecos().forEach(e -> {
+                e.setId(null);
+                e.setContato(contato);
+            });
+        }
+
         if (repository.existsByEmail(contato.getEmail())) {
             throw new InfosJaExistenteException("E-mail já cadastrado");
         }
