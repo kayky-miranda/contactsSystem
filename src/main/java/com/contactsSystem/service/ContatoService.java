@@ -86,16 +86,25 @@ public class ContatoService { // RESTful
     }
 
     @Transactional
-    public void atualizarPut(Long id, Contato contato){
+    public void atualizarPut(Long id, Contato contato) {
+
         Contato real = buscarPorId(id);
 
         real.setNome(contato.getNome());
         real.setEmail(contato.getEmail());
         real.setTelefone(contato.getTelefone());
         real.setDataNascimento(contato.getDataNascimento());
-        real.setEnderecos(contato.getEnderecos());
 
-        // realiza o preenchimento dos campos endereço pelo CEP
+        if (repository.existsByEmailAndIdNot(contato.getEmail(), id)) {
+            throw new InfosJaExistenteException("E-mail já cadastrado");
+        }
+
+        if (repository.existsByTelefoneAndIdNot(contato.getTelefone(), id)) {
+            throw new InfosJaExistenteException("Telefone já cadastrado");
+        }
+
+        validarData(contato.getDataNascimento());
+
         if (contato.getEnderecos() != null) {
 
             for (Endereco novo : contato.getEnderecos()) {
@@ -106,9 +115,8 @@ public class ContatoService { // RESTful
                         .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
                 if (novo.getCep() != null) {
-                    validarCep(novo.getCep()); //valida o cep
+                    validarCep(novo.getCep());
                     var viaCep = viaCepService.buscarPorCep(novo.getCep());
-
 
                     existente.setCep(novo.getCep());
                     existente.setRua(viaCep.logradouro());
@@ -117,23 +125,15 @@ public class ContatoService { // RESTful
                     existente.setUf(viaCep.uf());
                 }
 
-                if (novo.getNumero() != null)
+                if (novo.getNumero() != null) {
                     existente.setNumero(novo.getNumero());
-
+                }
             }
         }
 
-        if (repository.existsByEmail(contato.getEmail())) {
-            throw new InfosJaExistenteException("E-mail já cadastrado");
-        }
-        if (repository.existsByTelefone(contato.getTelefone())) {
-            throw new InfosJaExistenteException("Telefone já cadastrado");
-        }
-        validarData(contato.getDataNascimento());
-
-
         repository.save(real);
     }
+
 
     @Transactional
     public void atualizar(Long id, Contato contato) {
@@ -167,7 +167,17 @@ public class ContatoService { // RESTful
                     validarCep(novo.getCep()); //valida o cep
                     var viaCep = viaCepService.buscarPorCep(novo.getCep());
 
+                    if (novo.getNumero() != null)
+                        existente.setNumero(novo.getNumero());
 
+                    // verifica se existe o valor duplicado no db porem nao consideraa o id atual
+                    if (repository.existsByEmailAndIdNot(contato.getEmail(), id)) {
+                        throw new InfosJaExistenteException("E-mail já cadastrado");
+                    }
+                    if (repository.existsByTelefoneAndIdNot(contato.getTelefone(),id)) {
+                        throw new InfosJaExistenteException("Telefone já cadastrado");
+                    }
+                    validarData(contato.getDataNascimento());
                     existente.setCep(novo.getCep());
                     existente.setRua(viaCep.logradouro());
                     existente.setBairro(viaCep.bairro());
@@ -175,16 +185,7 @@ public class ContatoService { // RESTful
                     existente.setUf(viaCep.uf());
                 }
 
-                if (novo.getNumero() != null)
-                    existente.setNumero(novo.getNumero());
 
-                if (repository.existsByEmail(contato.getEmail())) {
-                    throw new InfosJaExistenteException("E-mail já cadastrado");
-                }
-                if (repository.existsByTelefone(contato.getTelefone())) {
-                    throw new InfosJaExistenteException("Telefone já cadastrado");
-                }
-                validarData(contato.getDataNascimento());
 
             }
         }
