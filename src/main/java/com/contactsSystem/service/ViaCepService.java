@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ViaCepService {
 
+    // utiliza a API ViaCep para buscar o endereço pelo CEP informado pelo Stackholder.
     private final RestTemplate restTemplate = new RestTemplate();
 
     public ViaCepDTO buscarPorCep(String cep) {

@@ -20,7 +20,8 @@ public class ContatoService { // RESTful
 
 
     private final ContatosRepository repository;
-    private final ViaCepService viaCepService; // injeção do viaCep em contatos
+    // injeção do viaCep em contatos
+    private final ViaCepService viaCepService;
 
     public ContatoService(ContatosRepository repository, ViaCepService viaCepService) {
         this.repository = repository;
@@ -31,16 +32,20 @@ public class ContatoService { // RESTful
         return repository.findAll();
     }
 
-    public Contato buscarPorId(Long id){ // busca um contato salvo pelo id
+    // busca um contato salvo pelo id
+    public Contato buscarPorId(Long id){
 
         return repository.findById(id).orElseThrow(
                 () -> new RuntimeException("Contato não encontrado")
         );
     }
 
+
     @Transactional
     public void salvar(Contato contato) {
 
+
+        // realiza o preenchimento dos campos endereço pelo CEP
         if (contato.getEnderecos() != null) {
 
             contato.getEnderecos().forEach(endereco -> {
@@ -59,7 +64,7 @@ public class ContatoService { // RESTful
                 }
             });
         }
-
+        // evita adicionar ID de sub bancos de dados (endereco) no JSON
         if (contato.getEnderecos() != null) {
             contato.getEnderecos().forEach(e -> {
                 e.setId(null);
@@ -67,12 +72,15 @@ public class ContatoService { // RESTful
             });
         }
 
+        // trata a exception de informações existentes
         if (repository.existsByEmail(contato.getEmail())) {
             throw new InfosJaExistenteException("E-mail já cadastrado");
         }
         if (repository.existsByTelefone(contato.getTelefone())) {
             throw new InfosJaExistenteException("Telefone já cadastrado");
         }
+
+        // valida a data
         validarData(contato.getDataNascimento());
         repository.saveAndFlush(contato);
     }
@@ -87,6 +95,7 @@ public class ContatoService { // RESTful
         real.setDataNascimento(contato.getDataNascimento());
         real.setEnderecos(contato.getEnderecos());
 
+        // realiza o preenchimento dos campos endereço pelo CEP
         if (contato.getEnderecos() != null) {
 
             for (Endereco novo : contato.getEnderecos()) {
@@ -144,6 +153,7 @@ public class ContatoService { // RESTful
         if (contato.getDataNascimento() != null)
             real.setDataNascimento(contato.getDataNascimento());
 
+        // realiza o preenchimento dos campos endereço pelo CEP
         if (contato.getEnderecos() != null) {
 
             for (Endereco novo : contato.getEnderecos()) {
@@ -191,6 +201,7 @@ public class ContatoService { // RESTful
         if (cep == null || cep.isBlank()) {
             throw new CepInvalidoException("O CEP é obrigatório");
         }
+
         //replace ajuda a retirar os "-" e dar um replacement ""
         String cepNumerico = cep.replace("-", "");
 
@@ -203,14 +214,17 @@ public class ContatoService { // RESTful
 
     private void validarData(LocalDate dataNascimento) {
 
+        // valida se o campo está preenchido
         if (dataNascimento == null) {
             throw new DataInvalidaException("Data de nascimento é obrigatoria");
         }
 
+        // valida se a data de nascimento é maior que o dia de hoje
         if (dataNascimento.isAfter(LocalDate.now())) {
             throw new DataInvalidaException("Data de nascimento não pode ser maior que o dia de hoje");
         }
 
+        // valida se a data preenchida está conforme
         if (dataNascimento.isBefore(LocalDate.of(1900, 1, 1))) {
             throw new DataInvalidaException("Data de nascimento inválida");
         }
