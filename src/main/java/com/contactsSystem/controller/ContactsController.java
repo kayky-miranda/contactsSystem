@@ -15,7 +15,6 @@ import java.util.List;
 @Tag(name = "Contatos", description = "Gerenciamento de contatos")
 public class ContactsController {
 
-
     @Autowired
     private ContatoService service;
 

@@ -17,8 +17,6 @@ import java.util.List;
 @Service
 public class ContatoService { // RESTful
 
-
-
     private final ContatosRepository repository;
     // injeção do viaCep em contatos
     private final ViaCepService viaCepService;
@@ -39,7 +37,6 @@ public class ContatoService { // RESTful
                 () -> new RuntimeException("Contato não encontrado")
         );
     }
-
 
     @Transactional
     public void salvar(Contato contato) {

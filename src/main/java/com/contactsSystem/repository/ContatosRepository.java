@@ -12,3 +12,4 @@ public interface ContatosRepository extends JpaRepository<Contato, Long> {
 
     boolean existsByTelefoneAndIdNot(String telefone, Long id);
 }
+ 
