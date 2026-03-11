@@ -32,4 +32,5 @@ public class Contato {
     @OneToMany(mappedBy = "contato", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Endereco> enderecos;
+
 }
