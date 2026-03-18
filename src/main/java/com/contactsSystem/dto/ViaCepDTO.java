@@ -1,5 +1,6 @@
 package com.contactsSystem.dto;
 
+
 public record ViaCepDTO(
         String cep,
         String logradouro,
