@@ -83,7 +83,6 @@ class ContatosRepositoryTest {
         assertFalse(result);
     }
 
-
     private Contato createContato(Contato contato){
         this.entityManager.persist(contato);
         return contato;
