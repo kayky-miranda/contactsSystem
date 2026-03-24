@@ -1,4 +1,7 @@
 package com.contactsSystem.dto;
 
-public record RegisterDTO() {
+import com.contactsSystem.domain.UserRole;
+
+public record RegisterDTO(String login, String password, UserRole role) {
 }
+
