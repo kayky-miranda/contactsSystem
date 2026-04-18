@@ -55,7 +55,7 @@ class ContatosRepositoryTest {
     }
 
     @Test
-    @DisplayName("Teste unitário para verificar se o contato existe pelo e-mail")
+    @DisplayName("Teste unitário para verificar se o contato existe telefone")
     void existByTelefoneCase1(){
 
         String telefone = "11999999999";
@@ -74,7 +74,7 @@ class ContatosRepositoryTest {
     }
 
     @Test
-    @DisplayName("Teste unitário para verificar se o contato não existe pelo e-mail")
+    @DisplayName("Teste unitário para verificar se o contato não existe telefone")
     void existsByTelefoneCase2() {
         String telefone = "11999999999";
 

@@ -33,6 +33,7 @@ public class ContatoService { // RESTful
     // busca um contato salvo pelo id
     public Contato buscarPorId(Long id){
 
+
         return repository.findById(id).orElseThrow(
                 () -> new RuntimeException("Contato não encontrado")
         );

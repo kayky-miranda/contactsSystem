@@ -1,6 +1,7 @@
 package com.contactsSystem.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,8 +23,17 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @NotBlank(message = "O login é obrigatório")
+    @Column(nullable = false, unique = true)
     private String login;
+
+    @NotBlank(message = "A senha é obrigatória")
+    @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private UserRole role;
 
     public User(String login, String password, UserRole role) {
@@ -46,6 +56,11 @@ public class User implements UserDetails {
     @Override
     public boolean isAccountNonExpired() {
         return true;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override

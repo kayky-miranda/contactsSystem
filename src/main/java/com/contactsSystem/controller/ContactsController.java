@@ -18,10 +18,16 @@ public class ContactsController {
     @Autowired
     private ContatoService service;
 
+    @Operation(summary = "Buscar contato por ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<Contato> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
+    }
+
     @Operation(summary = "Listar todos os contatos")
     @GetMapping
-    public ResponseEntity<Contato> buscar(@RequestParam Long id){
-        return ResponseEntity.ok(service.buscarPorId(id));
+    public ResponseEntity<List<Contato>> listarTodos() {
+        return ResponseEntity.ok(service.listar());
     }
 
     @Operation(summary = "Criar novo contato")
@@ -31,20 +37,19 @@ public class ContactsController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Editar todas as informações do contato")
+    @Operation(summary = "Editar campo expecífico do  contato")
     @PatchMapping
     public ResponseEntity<Void> atualizar(@RequestParam Long id, @RequestBody Contato contato){
         service.atualizar(id, contato);
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Editar campo expecífico do  contato")
+    @Operation(summary = "Editar todas as informações")
     @PutMapping
     public ResponseEntity<Void> atualizarPut(@RequestParam Long id, @RequestBody Contato contato){
         service.atualizarPut(id, contato);
         return ResponseEntity.ok().build();
     }
-
 
     @Operation(summary = "Deletar contato")
     @DeleteMapping
