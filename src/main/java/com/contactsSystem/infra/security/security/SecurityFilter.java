@@ -1,4 +1,4 @@
-package com.contactsSystem.infra.security;
+package com.contactsSystem.infra.security.security;
 
 import com.contactsSystem.repository.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -19,6 +20,7 @@ public class SecurityFilter extends OncePerRequestFilter { // garante que vai ro
 
     @Autowired
     TokenService tokenService;
+
 
     @Autowired
     UserRepository userRepository;
@@ -37,7 +39,7 @@ public class SecurityFilter extends OncePerRequestFilter { // garante que vai ro
     }
 
 
-    private String recoverToken(HttpServletRequest request) {
+    private String recoverToken(HttpServletRequest request) { // metodo auxiliar
         var authHeader = request.getHeader("Authorization");
         if(authHeader == null) return null;
         return authHeader.replace("Bearer ", "");
